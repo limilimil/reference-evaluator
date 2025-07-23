@@ -76,38 +76,6 @@ evaluator_registry = {
 }
 
 
-class BoolEvaluator:
-    def match_title(self, src_ref, ext_ref):
-        if src_ref.title is None or ext_ref.title is None:
-            return False
-        return utils.normalise_str(src_ref.title) == utils.normalise_str(ext_ref.title)
-
-    def match_author(self, src_ref, ext_ref):
-        if len(src_ref.author) == 0:
-            return False
-        for auth in src_ref.author:
-            if auth not in ext_ref.author:
-                return False
-        return True
-
-    def match_doi(self, src_ref, ext_ref):
-        if src_ref.doi is None:
-            return "N/A"
-        else:
-            return src_ref.doi.lower() == ext_ref.doi.lower()
-
-
-    def evaluate(self, src_ref, ext_ref):
-        return {
-            'title': self.match_title(src_ref, ext_ref),
-            'author': self.match_author(src_ref, ext_ref),
-            'doi' : self.match_doi(src_ref, ext_ref)
-        }
-
-    def is_match(self, src_ref, ext_ref):
-        return all(self.evaluate(src_ref, ext_ref).values())
-
-
 class EvaluationController:
     def __init__(self, config):
         self.config = config

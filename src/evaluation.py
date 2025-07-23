@@ -139,8 +139,9 @@ class EvaluationController:
         results = {}
         for elem in self.config:
             results[elem] = self.evaluate_element(elem, src_ref, ext_ref)
+        overall = all(results[elem]["score"] for elem in results)
 
-        return {"results": results}
+        return {"overall": overall, "results": results}
 
 
 

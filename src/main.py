@@ -15,20 +15,21 @@ config_path = Path.cwd().joinpath("config.json")
 config = {
     "title": {
         "evaluators": ["boolean"]
-
     },
     "author": {
         "evaluators": ["boolean"]
     },
     "doi": {
         "evaluators": ["boolean"]
+    },
+    "pages": {
+        "evaluators": ["boolean"]
     }
 
 }
 
-# pdftoXML = PdfToXML(path, path, config_path)
-# parsed = pdftoXML.run()
-parsed = True
+pdftoXML = PdfToXML(path, path, config_path)
+parsed = pdftoXML.run()
 
 if parsed:
     with open(result_path) as my_file:

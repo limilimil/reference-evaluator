@@ -52,6 +52,13 @@ class BooleanDoiEvaluator(BooleanEvaluator):
         else:
             return int(src_doi.lower() == ext_doi.lower())
 
+class BooleanPagesEvaluator(BooleanEvaluator):
+    def evaluation(self, src_pages, ext_pages):
+        if src_pages == None or ext_pages == None:
+            return 0.5
+        else:
+            return int(src_pages.strip() == ext_pages.strip())
+
 
 evaluator_registry = {
     "title": {
@@ -62,6 +69,9 @@ evaluator_registry = {
     },
     "doi": {
         "boolean": BooleanDoiEvaluator()
+    },
+    "pages": {
+        "boolean": BooleanPagesEvaluator()
     }
 }
 
@@ -96,14 +106,6 @@ class BoolEvaluator:
 
     def is_match(self, src_ref, ext_ref):
         return all(self.evaluate(src_ref, ext_ref).values())
-
-
-class AdvanceEvaluator:
-    def match_pages(self, src_ref, ext_ref):
-        if src_ref.pages == None or ext_ref.pages == None:
-            return "N/A"
-        else:
-            return src_ref.pages.strip() == ext_ref.pages.strip()
 
 
 class EvaluationController:

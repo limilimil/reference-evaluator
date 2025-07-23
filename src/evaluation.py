@@ -31,26 +31,26 @@ class BooleanEvaluator(Evaluator):
 class BooleanTitleEvaluator(BooleanEvaluator):
     def evaluation(self, src_title, ext_title):
         if src_title is None or ext_title is None:
-            return False
-        return utils.normalise_str(src_title) == utils.normalise_str(ext_title)
+            return 0
+        return int(utils.normalise_str(src_title) == utils.normalise_str(ext_title))
 
 
 class BooleanAuthorEvaluator(BooleanEvaluator):
     def evaluation(self, src_auth, ext_auth):
         if len(src_auth) == 0:
-            return False
+            return 0
         for auth in src_auth:
             if auth not in ext_auth:
-                return False
-        return True
+                return 0
+        return 1
 
 
 class BooleanDoiEvaluator(BooleanEvaluator):
     def evaluation(self, src_doi, ext_doi):
         if src_doi is None:
-            return "N/A"
+            return 0.5
         else:
-            return src_doi.lower() == ext_doi.lower()
+            return int(src_doi.lower() == ext_doi.lower())
 
 
 evaluator_registry = {

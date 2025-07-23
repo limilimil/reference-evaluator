@@ -53,6 +53,17 @@ class BooleanDoiEvaluator(BooleanEvaluator):
             return src_ref.doi.lower() == ext_ref.doi.lower()
 
 
+evaluator_registry = {
+    "title": {
+        "boolean": BooleanTitleEvaluator
+    },
+    "author": {
+        "boolean": BooleanAuthorEvaluator
+    },
+    "doi": {
+        "boolean": BooleanDoiEvaluator
+    }
+}
 
 class BoolEvaluator:
     def match_title(self, src_ref, ext_ref):

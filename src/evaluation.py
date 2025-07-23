@@ -128,7 +128,7 @@ class EvaluationController:
 
         return {
             "score": score,
-            "evaluation": evaluations
+            "evaluation method": evaluations
         }
 
     #Placeholder function
@@ -141,12 +141,12 @@ class EvaluationController:
             results[elem] = self.evaluate_element(elem, src_ref, ext_ref)
         overall = all(results[elem]["score"] for elem in results)
 
-        return {"overall": overall, "results": results}
+        return {"overall": overall, "reference element": results}
 
 
 
-def evaluate_bibliography(bibliography, file_name=""):
-    evaluator = EvaluationController(BoolEvaluator(), None)
+def evaluate_bibliography(bibliography, config, file_name=""):
+    evaluator = EvaluationController(config)
     parsed_bib = parser.XmlBibliography().parse(bibliography)
     results = []
     for ref in parsed_bib:
@@ -154,9 +154,9 @@ def evaluate_bibliography(bibliography, file_name=""):
         if search_results is not None:
             found_ref = crossref.CrossrefParser().extract_ref(search_results)
             evaluation = evaluator.evaluate(ref, found_ref)
-            results.append({'reference': ref, 'evaluation': evaluation, 'reference_located': found_ref})
+            results.append({'reference': ref, 'reference_located': found_ref, 'evaluation': evaluation})
         else:
-            results.append({'reference': ref, 'evaluation': 'None', 'reference_located': 'Not Found'})
+            results.append({'reference': ref, 'reference_located': 'None Found', 'evaluation': 'None'})
 
     print("finished, returning results")
     utils.export_json(results, file_name + (" - " if len(file_name) > 0 else "") + "verification results")

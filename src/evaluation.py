@@ -14,13 +14,13 @@ class Evaluator(abc.ABC):
         pass
 
     @abstractmethod
-    def evaluation(self, src_ref, ext_ref):
+    def evaluation(self, src, ext):
         pass
 
-    def evaluate(self, src_ref, ext_ref):
+    def evaluate(self, src, ext):
         return {
-            "type": self.name(),
-            "score": self.evaluation(src_ref, ext_ref)
+            "method": self.name(),
+            "score": self.evaluation(src, ext)
         }
 
 class BooleanEvaluator(Evaluator):
@@ -29,41 +29,42 @@ class BooleanEvaluator(Evaluator):
 
 
 class BooleanTitleEvaluator(BooleanEvaluator):
-    def evaluation(self, src_ref, ext_ref):
-        if src_ref.title is None or ext_ref.title is None:
+    def evaluation(self, src_title, ext_title):
+        if src_title is None or ext_title is None:
             return False
-        return utils.normalise_str(src_ref.title) == utils.normalise_str(ext_ref.title)
+        return utils.normalise_str(src_title) == utils.normalise_str(ext_title)
 
 
 class BooleanAuthorEvaluator(BooleanEvaluator):
-    def evaluation(self, src_ref, ext_ref):
-        if len(src_ref.author) == 0:
+    def evaluation(self, src_auth, ext_auth):
+        if len(src_auth) == 0:
             return False
-        for auth in src_ref.author:
-            if auth not in ext_ref.author:
+        for auth in src_auth:
+            if auth not in ext_auth:
                 return False
         return True
 
 
 class BooleanDoiEvaluator(BooleanEvaluator):
-    def evaluation(self, src_ref, ext_ref):
-        if src_ref.doi is None:
+    def evaluation(self, src_doi, ext_doi):
+        if src_doi is None:
             return "N/A"
         else:
-            return src_ref.doi.lower() == ext_ref.doi.lower()
+            return src_doi.lower() == ext_doi.lower()
 
 
 evaluator_registry = {
     "title": {
-        "boolean": BooleanTitleEvaluator
+        "boolean": BooleanTitleEvaluator()
     },
     "author": {
-        "boolean": BooleanAuthorEvaluator
+        "boolean": BooleanAuthorEvaluator()
     },
     "doi": {
-        "boolean": BooleanDoiEvaluator
+        "boolean": BooleanDoiEvaluator()
     }
 }
+
 
 class BoolEvaluator:
     def match_title(self, src_ref, ext_ref):
@@ -106,11 +107,41 @@ class AdvanceEvaluator:
 
 
 class EvaluationController:
-    def __init__(self, stage1, stage2):
-        self.stage1 = stage1
-        self.stage2 = stage2
+    def __init__(self, config):
+        self.config = config
+
+    def evaluate_element(self, element, src_ref, ext_ref):
+        src_elem = getattr(src_ref, element)
+        ext_elem = getattr(ext_ref, element)
+        eval_names = self.config[element]["evaluators"]
+        evaluations = []
+
+        for eval in eval_names:
+            evaluator = evaluator_registry.get(element).get(eval)
+            result = evaluator.evaluate(src_elem, ext_elem)
+            evaluations.append(result)
+
+        if len(eval_names) == 1:
+            score = evaluations[0]["score"]
+        else:
+            score = self.aggregate(evaluations)
+
+        return {
+            "score": score,
+            "evaluation": evaluations
+        }
+
+    #Placeholder function
+    def aggregate(self, evaluations):
+        return sum(evaluations)/len(evaluations)
+
     def evaluate(self, src_ref, ext_ref):
-        return {"stage": 1, "matches": self.stage1.is_match(src_ref, ext_ref), "results": self.stage1.evaluate(src_ref, ext_ref)}
+        results = {}
+        for elem in self.config:
+            results[elem] = self.evaluate_element(elem, src_ref, ext_ref)
+
+        return {"results": results}
+
 
 
 def evaluate_bibliography(bibliography, file_name=""):

@@ -49,24 +49,30 @@ class BooleanAuthorEvaluator(BooleanEvaluator):
 class BooleanDoiEvaluator(BooleanEvaluator):
     def evaluation(self, src_doi, ext_doi):
         if src_doi is None:
-            return 0.5
+            return "N/A"
         else:
             return float(src_doi.lower() == ext_doi.lower())
 
 class BooleanDateEvaluator(BooleanEvaluator):
     def evaluation(self, src, ext):
         if src is None or ext is None:
-            return 0.5
+            return "N/A"
         else:
             return float(src.strip() == ext.strip())
 
 class BooleanPagesEvaluator(BooleanEvaluator):
     def evaluation(self, src_pages, ext_pages):
         if src_pages is None or ext_pages is None:
-            return 0.5
+            return "N/A"
         else:
             return float(src_pages.strip() == ext_pages.strip())
 
+class BooleanVolumeEvaluator(BooleanEvaluator):
+    def evaluation(self, src, ext):
+        if src is None or ext is None:
+            return "N/A"
+        else:
+            return float(src.strip() == ext.strip())
 
 class LevenshteinEvaluator(Evaluator):
     def name(self):
@@ -97,6 +103,9 @@ evaluator_registry = {
     "date": {
         "boolean": BooleanDateEvaluator(),
         "levenshtein": LevenshteinDateEvaluator()
+    },
+    "volume": {
+        "boolean": BooleanVolumeEvaluator()
     },
     "pages": {
         "boolean": BooleanPagesEvaluator()

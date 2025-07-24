@@ -13,7 +13,7 @@ class CrossrefSearcher:
         try:
             result = self.cr.works(query_title=title, query_author=authors)
             if result['status'] == 'ok':
-                print("successful, returning")
+                print("results found")
                 if len(result['message']['items']) < 1:
                     print("no results found")
                     return None

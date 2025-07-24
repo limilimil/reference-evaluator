@@ -6,6 +6,8 @@ import parser
 import crossref
 import os
 
+import rapidfuzz
+
 mailto = os.getenv("MAILTO")
 
 class Evaluator(abc.ABC):
@@ -25,44 +27,53 @@ class Evaluator(abc.ABC):
 
 class BooleanEvaluator(Evaluator):
     def name(self):
-        return "Boolean"
+        return "boolean"
 
 
 class BooleanTitleEvaluator(BooleanEvaluator):
     def evaluation(self, src_title, ext_title):
         if src_title is None or ext_title is None:
-            return 0
-        return int(utils.normalise_str(src_title) == utils.normalise_str(ext_title))
+            return 0.0
+        return float(utils.normalise_str(src_title) == utils.normalise_str(ext_title))
 
 
 class BooleanAuthorEvaluator(BooleanEvaluator):
     def evaluation(self, src_auth, ext_auth):
         if len(src_auth) == 0:
-            return 0
+            return 0.0
         for auth in src_auth:
             if auth not in ext_auth:
-                return 0
-        return 1
-
+                return 0.0
+        return 1.0
 
 class BooleanDoiEvaluator(BooleanEvaluator):
     def evaluation(self, src_doi, ext_doi):
         if src_doi is None:
             return 0.5
         else:
-            return int(src_doi.lower() == ext_doi.lower())
+            return float(src_doi.lower() == ext_doi.lower())
 
 class BooleanPagesEvaluator(BooleanEvaluator):
     def evaluation(self, src_pages, ext_pages):
         if src_pages == None or ext_pages == None:
             return 0.5
         else:
-            return int(src_pages.strip() == ext_pages.strip())
+            return float(src_pages.strip() == ext_pages.strip())
+
+
+class LevenshteinEvaluator(Evaluator):
+    def name(self):
+        return "levenshtein"
+
+class LevenshteinTitleEvaluator(LevenshteinEvaluator):
+    def evaluation(self, src, ext):
+        return rapidfuzz.distance.Levenshtein.normalized_similarity(utils.normalise_str(src), utils.normalise_str(ext))
 
 
 evaluator_registry = {
     "title": {
-        "boolean": BooleanTitleEvaluator()
+        "boolean": BooleanTitleEvaluator(),
+        "levenshtein": LevenshteinTitleEvaluator()
     },
     "author": {
         "boolean": BooleanAuthorEvaluator()

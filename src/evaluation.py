@@ -127,15 +127,16 @@ class EvaluationController:
     def evaluate_element(self, element, src_ref, ext_ref):
         src_elem = getattr(src_ref, element)
         ext_elem = getattr(ext_ref, element)
-        eval_names = self.config[element]["evaluators"]
+        eval_weights = self.config[element]["evaluators"]
         evaluations = []
 
-        for eval in eval_names:
-            evaluator = evaluator_registry.get(element).get(eval)
+        for method, weight in eval_weights.items():
+            evaluator = evaluator_registry.get(element).get(method)
             result = evaluator.evaluate(src_elem, ext_elem)
+            result['weight'] = weight
             evaluations.append(result)
 
-        if len(eval_names) == 1:
+        if len(evaluations) == 1:
             score = evaluations[0]["score"]
         else:
             score = self.aggregate(evaluations)

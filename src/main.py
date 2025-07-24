@@ -16,19 +16,34 @@ config_path = Path.cwd().joinpath("example-config.json")
 
 example_config = {
     "title": {
-        "evaluators": ["levenshtein"]
+        "evaluators": {
+            "levenshtein": 1.0
+        }
     },
     "author": {
-        "evaluators": ["boolean"]
+        "evaluators": {
+            "boolean": 1.0
+        }
     },
     "doi": {
-        "evaluators": ["boolean"]
+        "evaluators": {
+            "boolean": 1.0
+        }
     },
     "date": {
-      "evaluators": ["levenshtein"]
+        "evaluators": {
+            "levenshtein": 1.0
+        }
+    },
+    "volume": {
+        "evaluators": {
+            "levenshtein": 1.0
+        }
     },
     "pages": {
-        "evaluators": ["boolean"]
+        "evaluators": {
+            "boolean": 1.0
+        }
     }
 }
 

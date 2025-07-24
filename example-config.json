@@ -1,27 +1,32 @@
 {
     "title": {
-        "evaluators": [
-            "levenshtein"
-        ]
+        "evaluators": {
+            "levenshtein": 1.0
+        }
     },
     "author": {
-        "evaluators": [
-            "boolean"
-        ]
+        "evaluators": {
+            "boolean": 1.0
+        }
     },
     "doi": {
-        "evaluators": [
-            "boolean"
-        ]
+        "evaluators": {
+            "boolean": 1.0
+        }
     },
     "date": {
-        "evaluators": [
-            "boolean"
-        ]
+        "evaluators": {
+            "levenshtein": 1.0
+        }
+    },
+    "volume": {
+        "evaluators": {
+            "levenshtein": 1.0
+        }
     },
     "pages": {
-        "evaluators": [
-            "boolean"
-        ]
+        "evaluators": {
+            "boolean": 1.0
+        }
     }
 }

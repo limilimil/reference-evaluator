@@ -1,0 +1,22 @@
+{
+    "title": {
+        "evaluators": [
+            "boolean"
+        ]
+    },
+    "author": {
+        "evaluators": [
+            "boolean"
+        ]
+    },
+    "doi": {
+        "evaluators": [
+            "boolean"
+        ]
+    },
+    "pages": {
+        "evaluators": [
+            "boolean"
+        ]
+    }
+}

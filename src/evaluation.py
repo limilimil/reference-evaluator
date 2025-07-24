@@ -109,7 +109,7 @@ class EvaluationController:
 
         return {
             "score": score,
-            "evaluation method": evaluations
+            "evaluation-method": evaluations
         }
 
     #Placeholder function
@@ -135,9 +135,9 @@ def evaluate_bibliography(bibliography, config, file_name=""):
         if search_results is not None:
             found_ref = crossref.CrossrefParser().extract_ref(search_results)
             evaluation = evaluator.evaluate(ref, found_ref)
-            results.append({'reference': ref, 'reference_located': found_ref, 'evaluation': evaluation})
+            results.append({'reference': ref, 'reference-located': found_ref, 'evaluation': evaluation})
         else:
-            results.append({'reference': ref, 'reference_located': 'None Found', 'evaluation': 'None'})
+            results.append({'reference': ref, 'reference-located': 'None Found', 'evaluation': 'None'})
 
     print("finished, returning results")
     utils.export_json(results, file_name + (" - " if len(file_name) > 0 else "") + "verification results")

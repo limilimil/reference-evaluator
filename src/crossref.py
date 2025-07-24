@@ -59,12 +59,19 @@ class CrossrefParser:
             auth_list.append(author)
         return auth_list
 
+    def extract_date(self, res):
+        try:
+            date = res['published']['date-parts'][0][0]
+        except(KeyError, IndexError, TypeError):
+            date = None
+        return date
+
     def extract_ref(self, res):
         ref = m.Reference(res.get('title', [None])[0],  # return list with None if no title to prevent out of range
                         self.extract_author(res.get('author')),
                         res.get('DOI'),
                         res.get('URL'),
-                        res.get('date'),
+                        self.extract_date(res),
                         res.get('container-title'),
                         res.get('volume'),
                         res.get('page'))

@@ -1,7 +1,7 @@
 {
     "title": {
         "evaluators": [
-            "boolean"
+            "levenshtein"
         ]
     },
     "author": {
@@ -10,6 +10,11 @@
         ]
     },
     "doi": {
+        "evaluators": [
+            "boolean"
+        ]
+    },
+    "date": {
         "evaluators": [
             "boolean"
         ]

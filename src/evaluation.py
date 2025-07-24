@@ -53,9 +53,16 @@ class BooleanDoiEvaluator(BooleanEvaluator):
         else:
             return float(src_doi.lower() == ext_doi.lower())
 
+class BooleanDateEvaluator(BooleanEvaluator):
+    def evaluation(self, src, ext):
+        if src is None or ext is None:
+            return 0.5
+        else:
+            return float(src.strip() == ext.strip())
+
 class BooleanPagesEvaluator(BooleanEvaluator):
     def evaluation(self, src_pages, ext_pages):
-        if src_pages == None or ext_pages == None:
+        if src_pages is None or ext_pages is None:
             return 0.5
         else:
             return float(src_pages.strip() == ext_pages.strip())
@@ -80,6 +87,9 @@ evaluator_registry = {
     },
     "doi": {
         "boolean": BooleanDoiEvaluator()
+    },
+    "date": {
+        "boolean": BooleanDateEvaluator()
     },
     "pages": {
         "boolean": BooleanPagesEvaluator()

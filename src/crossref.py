@@ -61,7 +61,7 @@ class CrossrefParser:
 
     def extract_date(self, res):
         try:
-            date = res['published']['date-parts'][0][0]
+            date = str(res['published']['date-parts'][0][0])
         except(KeyError, IndexError, TypeError):
             date = None
         return date

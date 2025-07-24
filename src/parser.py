@@ -1,3 +1,5 @@
+import re
+
 from grobid_client.grobid_client import GrobidClient
 
 import models as m
@@ -55,12 +57,22 @@ class XmlBibliography:
         else:
             return result.text
 
+    def extract_year(self, ref):
+        result = ref.find('date')
+        if result == None or not result.has_attr('when'):
+            return
+        date = result.get('when')
+        date_regx = re.compile(r'^(?P<year>\d{4})')
+        match = date_regx.match(date)
+        return match.group('year') if match else None
+
     def parse_ref(self, ref):
         title = self.extract_text(ref, 'title', {'type':'main'})
         authors = self.parse_author_list(ref)
         doi = self.extract_text(ref, 'idno', {'type': 'DOI'})
+        date = self.extract_year(ref)
         pages = self.extract_pages(ref)
-        return m.Reference(title, authors, doi, pages=pages)
+        return m.Reference(title, authors, doi, date=date, pages=pages)
 
     def parse(self, soup):
         bib = soup.find_all('biblStruct')

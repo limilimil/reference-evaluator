@@ -25,13 +25,12 @@ example_config = {
         "evaluators": ["boolean"]
     },
     "date": {
-      "evaluators": ["boolean"]
+      "evaluators": ["levenshtein"]
     },
     "pages": {
         "evaluators": ["boolean"]
     }
 }
-
 
 with open(config_path) as c:
     config = json.load(c)

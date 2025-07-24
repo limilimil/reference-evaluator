@@ -88,6 +88,12 @@ class LevenshteinDateEvaluator(LevenshteinEvaluator):
             return "N/A"
         return rapidfuzz.distance.Levenshtein.normalized_similarity(src.strip(), ext.strip())
 
+class LevenshteinVolumeEvaluator(LevenshteinEvaluator):
+    def evaluation(self, src, ext):
+        if src is None or ext is None:
+            return "N/A"
+        return rapidfuzz.distance.Levenshtein.normalized_similarity(src.strip(), ext.strip())
+
 
 evaluator_registry = {
     "title": {
@@ -105,7 +111,8 @@ evaluator_registry = {
         "levenshtein": LevenshteinDateEvaluator()
     },
     "volume": {
-        "boolean": BooleanVolumeEvaluator()
+        "boolean": BooleanVolumeEvaluator(),
+        "levenshtein": LevenshteinVolumeEvaluator()
     },
     "pages": {
         "boolean": BooleanPagesEvaluator()

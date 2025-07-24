@@ -11,7 +11,7 @@ import utils
 path = Path.cwd().joinpath("resources", "test-data", "compressed.tracemonkey-pldi-09.pdf")
 
 result_path = path.with_suffix(".grobid.tei.xml")
-grobid_config = Path.cwd().joinpath("config.json")
+grobid_config = Path.cwd().joinpath("grobid-config.json")
 config_path = Path.cwd().joinpath("example-config.json")
 
 example_config = {

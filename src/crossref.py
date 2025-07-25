@@ -1,13 +1,13 @@
-'''
+"""
 Crossref API related classes
 For searching for references and parsing results in reference objects
-'''
+"""
 
 from habanero import Crossref
 
 import models as m
 
-'''
+"""
 Searcher for accessing the Crossref API
 
 Attributes:
@@ -23,8 +23,7 @@ Methods:
         Query search via doi number
     search(ref):
         Conducts a multi-stage search
-
-'''
+"""
 class CrossrefSearcher:
     def __init__(self, mailto, timeout):
         self.mailto = mailto
@@ -96,8 +95,34 @@ class CrossrefSearcher:
         else:
             return self.search_title(ref.title, ref.author)
 
+
+"""
+Parse a search results dict into Reference objects
+
+Attributes:
+    None
+    
+Methods:
+    extract_author(authors):
+        Parse author list into a list of Author objects
+    extract_date(res):
+        Retrieve publish year from search results
+    extract_ref(res):
+        Parse a single reference from search results into a Reference instance
+    extract_results(res):
+        Parse search results to a list of Reference objects
+"""
 class CrossrefParser:
 
+    """
+    Parse author list into a list of Author objects
+
+    Parameters:
+        authors (list[dict[str, str]]): author list from search results
+
+    Returns:
+        list[Author]: List of Author instances
+    """
     def extract_author(self, authors):
         auth_list = []
         if authors is None:
@@ -109,6 +134,15 @@ class CrossrefParser:
             auth_list.append(author)
         return auth_list
 
+    """
+    Retrieve publish year from search results
+
+    Parameters:
+        res (dict): Search results dictionary
+
+    Returns:
+        str: 4 digit numerical year as a string
+    """
     def extract_date(self, res):
         try:
             date = str(res['published']['date-parts'][0][0])
@@ -116,6 +150,15 @@ class CrossrefParser:
             date = None
         return date
 
+    """
+    Parse a single reference from search results into a Reference instance
+
+    Parameters:
+        res (dict): A reference from search results dictionary
+
+    Returns:
+        Reference: instance with attributes retrieved from parsed data
+    """
     def extract_ref(self, res):
         ref = m.Reference(res.get('title', [None])[0],  # return list with None if no title to prevent out of range
                         self.extract_author(res.get('author')),
@@ -127,6 +170,15 @@ class CrossrefParser:
                         res.get('page'))
         return ref
 
+    """
+    Parse search results to a list of Reference objects
+
+    Parameters:
+        res (dict): Search results dictionary
+
+    Returns:
+        list[Reference]: A list of parsed Reference objects
+    """
     def extract_results(self, res):
         results = []
         for ref in res:

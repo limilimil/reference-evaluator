@@ -5,11 +5,8 @@ from statistics import fmean
 import utils
 import parser
 import crossref
-import os
 
 import rapidfuzz
-
-mailto = os.getenv("MAILTO")
 
 class Evaluator(abc.ABC):
     @abstractmethod
@@ -169,8 +166,15 @@ class EvaluationController:
         return {"overall": overall, "reference element": results}
 
 
-
-def evaluate_bibliography(bibliography, config, file_name=""):
+"""
+Run full evaluator
+Parameters:
+bibliography (BeautifulSoup): reference XML file as a bs object
+config (dict): evaluation configuration
+mailto (str): email address required for crossref api
+file_name (str): name of output file (optional)
+"""
+def evaluate_bibliography(bibliography, config, mailto, file_name=""):
     evaluator = EvaluationController(config)
     parsed_bib = parser.XmlBibliography().parse(bibliography)
     results = []

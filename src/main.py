@@ -5,8 +5,11 @@ from bs4 import BeautifulSoup
 
 from parser import PdfToXML
 
+import os
 import evaluation
 import json
+
+mailto = os.getenv("MAILTO")
 
 path = Path.cwd().joinpath("resources", "test-data", "compressed.tracemonkey-pldi-09.pdf")
 
@@ -58,5 +61,5 @@ parsed = pdftoXML.run()
 if parsed:
     with open(result_path) as my_file:
         soup = BeautifulSoup(my_file, "lxml-xml")
-        results = evaluation.evaluate_bibliography(soup, config, "compressed.tracemonkey-pldi-09")
+        results = evaluation.evaluate_bibliography(soup, config, mailto, "compressed.tracemonkey-pldi-09")
 

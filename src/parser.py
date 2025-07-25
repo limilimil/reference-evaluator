@@ -6,7 +6,7 @@ import models as m
 
 """
 Converts pdf file into parsable XML
-Paramters:
+Parameters:
 input_path (str): File path of the pdf to be parsed
 output_path (str): File path for the resulting xml file
 config_path (str): Location of Grobid config file (optional)

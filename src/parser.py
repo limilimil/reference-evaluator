@@ -48,25 +48,47 @@ Methods:
         Parses publishing year as a string
     extract_pages (ref):
         Parses pages element as a string
-    parse_ref:
+    parse_ref (ref):
         Transforms an individual reference into a Reference object
-    parse:
+    parse (soup):
         Parses entire bibliography and returns a list of Reference instances
 """
 class XmlBibliography:
-
+    """
+    Finds a specified XML tag and returns its text content
+    Parameters:
+        ref (BeautifulSoup): XML parser Soup object
+        tag (str): The XML tag to find
+        attrib (str): XML tag attrib to find (Optional)
+    Returns:
+        str: Inner text content of the tag found
+    """
     def extract_text(self, ref, tag, attrib=None):
         result = ref.find(tag, attrib)
         return result.text if result is not None else None
 
+    """
+    Transforms an individual author tag to an Author instance
+    Parameters:
+        author (BeautifulSoup): XML Soup object author tag 
+    Returns:
+        Author: Name elements parsed into an Author instance
+    """
     def parse_author(self, author):
         forename = self.extract_text(author, 'forename', {'type': 'first'})
         middle = self.extract_text(author, 'forename', {'type': 'middle'})
         if isinstance(forename, str) and isinstance(middle, str):
-            forename = " ".join([forename, middle])
+            forename = " ".join([forename, middle]) # Combine forename and middle name
         surname = self.extract_text(author, 'surname')
         return m.Author(forename, surname)
 
+    """
+    Extracts all authors of a reference
+    Parameters:
+        ref (BeautifulSoup): XML reference Soup object
+    Returns:
+        list[Author]: Collection of parsed Author objects
+    """
     def parse_author_list(self, ref):
         authors = ref.find_all('author')
         auth_list = []
@@ -74,15 +96,29 @@ class XmlBibliography:
             auth_list.append(self.parse_author(auth))
         return auth_list
 
+    """
+    Parses publishing year as a string
+    Parameters:
+        ref (BeautifulSoup): XML reference Soup object
+    Returns:
+        str: year
+    """
     def extract_year(self, ref):
         result = ref.find('date')
-        if result == None or not result.has_attr('when'):
-            return
+        if result is None or not result.has_attr('when'): # return if no when attribute
+            return None
         date = result.get('when')
-        date_regx = re.compile(r'^(?P<year>\d{4})')
+        date_regx = re.compile(r'^(?P<year>\d{4})') # regex for parsing year into capture group 'year'
         match = date_regx.match(date)
         return match.group('year') if match else None
 
+    """
+    Parses pages element as a string
+    Parameters:
+        ref (BeautifulSoup): XML reference Soup object
+    Returns:
+        str: pages
+    """
     def extract_pages(self, ref):
         result = ref.find('biblScope', {'unit': 'page'})
         if result == None:
@@ -92,7 +128,13 @@ class XmlBibliography:
             return pages
         else:
             return result.text
-
+    """
+    Transforms an individual reference into a Reference object
+    Parameters:
+        ref (BeautifulSoup): Single reference XML Parser Soup object 
+    Returns:
+        Reference: a instance object with parsed elements 
+    """
     def parse_ref(self, ref):
         title = self.extract_text(ref, 'title', {'type':'main'})
         authors = self.parse_author_list(ref)
@@ -102,8 +144,15 @@ class XmlBibliography:
         pages = self.extract_pages(ref)
         return m.Reference(title, authors, doi, date=date, volume=volume, pages=pages)
 
+    """
+    Parses entire bibliography and returns a list of Reference instances
+    Parameters:
+        soup (BeautifulSoup): XML Parser Soup object of entire bibliography 
+    Returns:
+        list[Reference]: all parsed references
+    """
     def parse(self, soup):
-        bib = soup.find_all('biblStruct')
+        bib = soup.find_all('biblStruct') # Name of a reference element tag on Grobid XML files
         parsed_bib = []
         for ref in bib:
             parsed_bib.append(self.parse_ref(ref))

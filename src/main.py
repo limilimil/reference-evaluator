@@ -1,3 +1,7 @@
+'''
+Example project usage
+'''
+
 
 from pathlib import Path
 

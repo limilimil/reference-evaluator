@@ -1,14 +1,46 @@
+'''
+Crossref API related classes
+For searching for references and parsing results in reference objects
+'''
+
 from habanero import Crossref
 
 import models as m
 
+'''
+Searcher for accessing the Crossref API
 
+Attributes:
+    mailto(str):
+        Email address required to access API
+    timeout(int):
+        curl timeout in seconds
+               
+Methods:
+    search_title(title, authors):
+        Query search via reference title
+    search_doi(doi):
+        Query search via doi number
+    search(ref):
+        Conducts a multi-stage search
+
+'''
 class CrossrefSearcher:
     def __init__(self, mailto, timeout):
         self.mailto = mailto
         self.timeout = timeout
-        self.cr = Crossref(mailto = self.mailto, timeout = self.timeout)
+        self.cr = Crossref(mailto = self.mailto, timeout = self.timeout) # initialises crossref object
 
+    """
+    Query search via reference title 
+    
+    Parameters:
+        title (str): Title of the reference
+        authors (list[str]): List of author names to query
+    
+    Returns:
+        dict: Search results
+    """
     def search_title(self, title, authors):
         try:
             result = self.cr.works(query_title=title, query_author=authors)
@@ -26,6 +58,15 @@ class CrossrefSearcher:
             print(e)
             return None
 
+    """
+    Query search via doi number
+
+    Parameters:
+        doi (str): DOI number to query
+
+    Returns:
+        dict: Search results
+    """
     def search_doi(self, doi):
         try:
             result = self.cr.works(ids=doi)
@@ -39,6 +80,15 @@ class CrossrefSearcher:
             print("major error")
             print(e)
             return None
+    """
+    Conducts a multi-stage search
+
+    Parameters:
+        ref (Reference): An Reference instance to query 
+
+    Returns:
+        dict: Search results
+    """
 
     def search(self, ref):
         if ref.doi is not None:

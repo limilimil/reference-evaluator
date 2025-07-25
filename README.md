@@ -19,6 +19,9 @@ pip install -r requirements.txt
 ```
 # docker terminal
 docker run -t --rm -p 8070:8070 grobid/grobid:0.8.2
+
+# python
+parser.PdfToXML(input_path, output_path, grobid_config)
 ```
 ### Reference evaluator:
 ```
@@ -26,9 +29,9 @@ evaluation.evaluate_bibliography(bibliography, config, mailto, file_name)
 
 ```
 #### Parameters:
-- bibliography (BeautifulSoup): reference XML file as a soup object
-- config (dict): evaluation configuration ([see example-config.json](https://github.com/limilimil/reference-evaluator/blob/main/example-config.json))
-- mailto (str): email address required for crossref api
-- file_name (str): name of output file (optional)
+- bibliography (BeautifulSoup): XML file of bibliography as soup parser object
+- config (dict): Evaluation configuration ([see example-config.json](https://github.com/limilimil/reference-evaluator/blob/main/example-config.json))
+- mailto (str): Email address required for crossref api
+- file_name (str): Name of output file (optional)
 
 

@@ -6,10 +6,13 @@ import models as m
 
 """
 Converts pdf file into parsable XML
-Parameters:
-input_path (str): File path of the pdf to be parsed
-output_path (str): File path for the resulting xml file
-config_path (str): Location of Grobid config file (optional)
+Attributes:
+    input_path (str): File path of the pdf to be parsed
+    output_path (str): File path for the resulting XML file
+    config_path (str): Location of Grobid config file
+Methods:
+    run:
+        Calls the Grobid client to parse PDF
 """
 class PdfToXML:
     def __init__(self, input_path, output_path, config_path="./config.json"):
@@ -17,16 +20,40 @@ class PdfToXML:
         self.output_path = output_path
         self.config_path = config_path
 
-    #Calls the grobid file to begin parsing
+    """
+    Calls the Grobid client begin parsing
+
+    Parameters: None
+    Returns:
+        bool: True if parsing was successful
+    """
     def run(self):
-        xml_path = self.input_path.with_suffix(".grobid.tei.xml")
+        xml_path = self.input_path.with_suffix(".grobid.tei.xml") # File path of resulting xml
         client = GrobidClient(config_path=self.config_path)
-        client.process("processReferences", self.input_path.parent, self.output_path.parent, verbose=True)
-        return (xml_path.is_file())
+        client.process("processReferences", self.input_path.parent, self.output_path.parent, verbose=True) #Grobid configurations
+        return (xml_path.is_file()) #Checks if XML file exists
 
 
+"""
+Converts Grobid XML file to data objects
+Attributes: None
+Methods:
+    extract_text (ref, tag, attrib):
+        Finds a specified XML tag and returns its text content
+    parse_author (author):
+        Transforms an individual author tag to an Author instance
+    parse_author_list (ref):
+        Extracts all authors of a reference
+    extract_year (ref):
+        Parses publishing year as a string
+    extract_pages (ref):
+        Parses pages element as a string
+    parse_ref:
+        Transforms an individual reference into a Reference object
+    parse:
+        Parses entire bibliography and returns a list of Reference instances
+"""
 class XmlBibliography:
-    # def __init__(self):
 
     def extract_text(self, ref, tag, attrib=None):
         result = ref.find(tag, attrib)

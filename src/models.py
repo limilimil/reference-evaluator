@@ -4,7 +4,6 @@ Data Models
 
 """
 Object for storing reference data
-
 Attributes:
     title(str):
         Title of the reference
@@ -22,7 +21,6 @@ Attributes:
         A numerical value as a string of the volume element
     pages(str):
         A numerical value as a string of the pages element 
-
 Methods:
     print_authors:
         Prints out each author on a seperate line
@@ -45,8 +43,7 @@ class Reference:
         self.pages = pages
 
     """
-    Prints out each author on a seperate line
-
+    Prints out each author on a separate line
     Parameters: None
     Returns: None
     """
@@ -56,12 +53,10 @@ class Reference:
 
     """
     Converts authors into strings and returns as a list
-
-     Parameters: None
-
-     Returns:
-         list[str]: list of author names
-     """
+    Parameters: None
+    Returns:
+        list[str]: list of author names
+    """
     def author_list(self):
         auth_list = []
         for a in self.author:
@@ -70,23 +65,19 @@ class Reference:
 
     """
     Checks if author list is empty
-
-     Parameters: None
-
-     Returns:
-         bool: False if empty
-     """
+    Parameters: None
+    Returns:
+        bool: False if empty
+    """
     def has_author(self):
         return isinstance(self.author, list) and len(self.author) > 0
 
     """
     Converts Reference object to dict for JSON export
-
-     Parameters: None
-
-     Returns:
-         dict: Attributes converted into key-value pairs
-     """
+    Parameters: None
+    Returns:
+        dict: Attributes converted into key-value pairs
+    """
     def encode(self):
         return self.__dict__
 
@@ -98,13 +89,11 @@ class Reference:
 
 """
 For storing author data
-
 Attributes:
     given(str):
         First name of an author
     family(str):
         Last name of an author
-
 Methods:
     as_string:
         Returns a string of the author's name
@@ -130,23 +119,19 @@ class Author:
 
     """
     Returns a string of the author's name
-
-     Parameters: None
-
-     Returns:
+    Parameters: None
+    Returns:
          str: String of the author's name
-     """
+    """
     def as_string(self):
         return self.family
 
     """
     Converts Author object to dict for JSON export
-
-     Parameters: None
-
-     Returns:
-         dict: Attributes converted into key-value pairs
-     """
+    Parameters: None
+    Returns:
+        dict: Attributes converted into key-value pairs
+    """
     def encode(self):
         return self.__dict__
 

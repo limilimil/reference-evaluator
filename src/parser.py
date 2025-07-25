@@ -1,7 +1,9 @@
+"""
+Utilities for parsing data
+"""
+
 import re
-
 from grobid_client.grobid_client import GrobidClient
-
 import models as m
 
 """
@@ -22,7 +24,6 @@ class PdfToXML:
 
     """
     Calls the Grobid client begin parsing
-
     Parameters: None
     Returns:
         bool: True if parsing was successful

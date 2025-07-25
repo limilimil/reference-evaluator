@@ -200,21 +200,75 @@ class BooleanVolumeEvaluator(BooleanEvaluator):
         else:
             return float(src.strip() == ext.strip())
 
+"""
+Abstract class for Levenshtein evaluators
+Methods:
+    name:
+        Returns the name of the evaluator
+"""
 class LevenshteinEvaluator(Evaluator):
+    """
+    Returns the name of the evaluator
+    Parameters: None
+    Returns:
+        str: Name of the evaluation method (class name)
+    """
     def name(self):
         return "levenshtein"
 
+"""
+Reference title attribute evaluation using Levenshtein algorithm
+Methods:
+    evaluation (src, ext):
+        The evaluation algorithm
+"""
 class LevenshteinTitleEvaluator(LevenshteinEvaluator):
+    """
+    The evaluation algorithm
+    Parameters:
+        src (str): Source Reference title attribute
+        ext (str): External Reference title attribute
+    Returns:
+        float: Normalised similarity score between 0.0-1.0
+    """
     def evaluation(self, src, ext):
         return rapidfuzz.distance.Levenshtein.normalized_similarity(utils.normalise_str(src), utils.normalise_str(ext))
 
+"""
+Reference date attribute evaluation using Levenshtein algorithm
+Methods:
+    evaluation (src, ext):
+        The evaluation algorithm
+"""
 class LevenshteinDateEvaluator(LevenshteinEvaluator):
+    """
+    The evaluation algorithm
+    Parameters:
+        src (str): Source Reference date attribute
+        ext (str): External Reference date attribute
+    Returns:
+        float: Normalised similarity score between 0.0-1.0
+    """
     def evaluation(self, src, ext):
         if src is None or ext is None:
             return "N/A"
         return rapidfuzz.distance.Levenshtein.normalized_similarity(src.strip(), ext.strip())
 
+"""
+Reference volume attribute evaluation using Levenshtein algorithm
+Methods:
+    evaluation (src, ext):
+        The evaluation algorithm
+"""
 class LevenshteinVolumeEvaluator(LevenshteinEvaluator):
+    """
+    The evaluation algorithm
+    Parameters:
+        src (str): Source Reference volume attribute
+        ext (str): External Reference volume attribute
+    Returns:
+        float: Normalised similarity score between 0.0-1.0
+    """
     def evaluation(self, src, ext):
         if src is None or ext is None:
             return "N/A"

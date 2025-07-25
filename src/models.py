@@ -1,5 +1,38 @@
+"""
+Data Models
+"""
 
+"""
+Object for storing reference data
 
+Attributes:
+    title(str):
+        Title of the reference
+    author(list[Author]):
+        The authors specified in reference stored as a list of Author objects
+    doi(str):
+        DOI number, if provided in a reference
+    url(str):
+        hyperlink if provided in a reference
+    date(str):
+        Year the referenced material was published
+    journal(str):
+        Title of the publishing journal
+    volume(str):
+        A numerical value as a string of the volume element
+    pages(str):
+        A numerical value as a string of the pages element 
+
+Methods:
+    print_authors:
+        Prints out each author on a seperate line
+    author_list:
+        Converts authors into strings and returns as a list
+    has_author:
+        Checks if author list is empty
+    encode:
+        Converts Reference object to dict for json export
+"""
 class Reference:
     def __init__(self, title=None, author=None, doi=None, url=None, date=None, journal=None, volume=None, pages=None):
         self.title = title
@@ -11,20 +44,49 @@ class Reference:
         self.volume = volume
         self.pages = pages
 
+    """
+    Prints out each author on a seperate line
 
+    Parameters: None
+    Returns: None
+    """
     def print_authors(self):
         for a in self.author:
             print(a)
 
+    """
+    Converts authors into strings and returns as a list
+
+     Parameters: None
+
+     Returns:
+         list[str]: list of author names
+     """
     def author_list(self):
         auth_list = []
         for a in self.author:
             auth_list.append(a.as_string())
         return auth_list
 
+    """
+    Checks if author list is empty
+
+     Parameters: None
+
+     Returns:
+         bool: False if empty
+     """
     def has_author(self):
         return isinstance(self.author, list) and len(self.author) > 0
 
+    """
+    Converts Reference object to dict for json export
+
+     Parameters: None
+
+     Returns:
+         dict: Attributes converted into key-value pairs
+     """
     def encode(self):
         return self.__dict__
 

@@ -1,5 +1,6 @@
 import abc
 from abc import abstractmethod
+from statistics import fmean
 
 import utils
 import parser
@@ -146,9 +147,18 @@ class EvaluationController:
             "evaluation-method": evaluations
         }
 
-    #Placeholder function
     def aggregate(self, evaluations):
-        return sum(evaluations)/len(evaluations)
+        scores = []
+        weights = []
+
+        for e in evaluations:
+            score = e['score']
+            weight = e.get('weight', 1.0)
+            if isinstance(score, float):
+                scores.append(score)
+                weights.append(weight)
+
+        return fmean(scores, weights=weights) if weights else None
 
     def evaluate(self, src_ref, ext_ref):
         results = {}

@@ -17,7 +17,8 @@ config_path = Path.cwd().joinpath("example-config.json")
 example_config = {
     "title": {
         "evaluators": {
-            "levenshtein": 1.0
+            "boolean": 1.0,
+            "levenshtein": 3.0
         }
     },
     "author": {
@@ -32,6 +33,7 @@ example_config = {
     },
     "date": {
         "evaluators": {
+            "boolean": 1.0,
             "levenshtein": 1.0
         }
     },
@@ -57,3 +59,4 @@ if parsed:
     with open(result_path) as my_file:
         soup = BeautifulSoup(my_file, "lxml-xml")
         results = evaluation.evaluate_bibliography(soup, config, "compressed.tracemonkey-pldi-09")
+

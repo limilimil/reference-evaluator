@@ -27,7 +27,7 @@ evaluation.evaluate_bibliography(bibliography, config, mailto, file_name)
 ```
 #### Parameters:
 - bibliography (BeautifulSoup): reference XML file as a soup object
-- config (dict): evaluation configuration
+- config (dict): evaluation configuration ([see example-config.json](https://github.com/limilimil/reference-evaluator/blob/main/example-config.json))
 - mailto (str): email address required for crossref api
 - file_name (str): name of output file (optional)
 

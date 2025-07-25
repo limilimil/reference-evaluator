@@ -31,7 +31,7 @@ Methods:
     has_author:
         Checks if author list is empty
     encode:
-        Converts Reference object to dict for json export
+        Converts Reference object to dict for JSON export
 """
 class Reference:
     def __init__(self, title=None, author=None, doi=None, url=None, date=None, journal=None, volume=None, pages=None):
@@ -80,7 +80,7 @@ class Reference:
         return isinstance(self.author, list) and len(self.author) > 0
 
     """
-    Converts Reference object to dict for json export
+    Converts Reference object to dict for JSON export
 
      Parameters: None
 
@@ -96,7 +96,21 @@ class Reference:
     def __repr__(self):
         return "Reference: %s" % (self.title[0:25] + "..." if isinstance(self.title, str) and len(self.title) > 25 else self.title)
 
+"""
+For storing author data
 
+Attributes:
+    given(str):
+        First name of an author
+    family(str):
+        Last name of an author
+
+Methods:
+    as_string:
+        Returns a string of the author's name
+    encode:
+        Converts Author object to dict for JSON export
+"""
 class Author:
     def __init__(self, given = None, family = None):
         self.given = given
@@ -104,7 +118,7 @@ class Author:
 
     def __eq__(self, other):
         if isinstance(other, Author):
-            if other.family == self.family:
+            if other.family == self.family: # Checks only if last names match
                 return True
         return False
 
@@ -114,9 +128,25 @@ class Author:
     def __repr__(self):
         return "Author Given: %s, Family: %s" % (self.given, self.family)
 
+    """
+    Returns a string of the author's name
+
+     Parameters: None
+
+     Returns:
+         str: String of the author's name
+     """
     def as_string(self):
         return self.family
 
+    """
+    Converts Author object to dict for JSON export
+
+     Parameters: None
+
+     Returns:
+         dict: Attributes converted into key-value pairs
+     """
     def encode(self):
         return self.__dict__
 
